@@ -13,6 +13,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
 
     <!-- Your app -->
+    <!--<script type="text/javascript" src="angular-materialize.js"></script>-->
     <script type="text/javascript" src="user-controller.js"></script>
     <style type="text/css">
 
@@ -45,7 +46,16 @@
     <main>
 
         <div class="row" style="margin-top: 50px;">
-            <form>
+            <div class="col s12 right-align">
+                <button class="btn waves-effect waves-light" ng-click="details = !details">{{ details ? "Close" : "Show" }} Details User</button>
+                <button class="btn waves-effect waves-light" ng-click="showSearh = !showSearh">{{ showSearh ? "Close" : "Show" }} Search</button>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 50px;" ng-show="details">
+            <fieldset>
+                <legend>Data User</legend>
+            <form name="userForm" id="userForm">
                 <div class="row">
 
                     <input type="hidden" ng-model="new.id">
@@ -61,11 +71,13 @@
                     </div>
 
                     <div class="input-field col s4">
-                        <select name="enabled" id="enabled" ng-model="select.value" material-select watch>
-                            <option>true</option>
-                            <option>false</option>
+                        <select class="" ng-model="select.value" material-select watch>
+                            <!--<select class="" ng-model="select.value1" material-select watch>    -->
+                            <!--<option>true</option>-->
+                            <!--<option>false</option>-->
+                            <option ng-repeat="value in select.choices">{{value}}</option>
                         </select>
-                        <label for="enabled">enabled</label>
+                        <label>Enabled</label>
                     </div>
 
 
@@ -128,8 +140,48 @@
                 </div>
 
             </form>
+            </fieldset>
         </div>
 
+        <div class="row" ng-show="showSearh">
+            <fieldset>
+                <legend>Search</legend>
+                <div class="row">
+
+                    <!--username, name ou email-->
+                    <div class="input-field col s3">
+                        <select name="typeConsulta" id="typeConsulta" ng-model="selectSearch.value" material-select watch>
+                            <option ng-repeat="value in selectSearch.choices">{{value}}</option>
+                        </select>
+                        <label for="enabled">Type of search</label>
+                    </div>
+
+                    <div class="input-field col s3">
+                        <input type="text" name="searchnome" id="searhnome" ng-model="search.name" class="validade" placeholder="Name">
+                        <label for="searhnome">Name</label>
+                    </div>
+
+                    <div class="input-field col s3">
+                        <input type="text" name="searchusername" id="searchusername" ng-model="search.username" class="validade" placeholder="Username">
+                        <label for="searchusername">Username</label>
+                    </div>
+
+                    <div class="input-field col s3">
+                        <input type="email" name="searchemail" id="searhemail" ng-model="search.email" class="validade" placeholder="E-mail">
+                        <label for="searhemail">E-mail</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12 right-align">
+                            <button class="btn waves-effect waves-light" ng-click="searchUser()">Search</button>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </fieldset>
+        </div>
 
 
         <div class="row">
@@ -139,7 +191,7 @@
                 <tr>
                     <th>id</th>
                     <th>username</th>
-                    <th>password</th>
+                    <!--<th>password</th>-->
                     <th>enabled</th>
                     <th>registerDate</th>
                     <th>name</th>
@@ -155,7 +207,7 @@
                 <tr ng-repeat="u in users">
                     <td>{{ u.id }}</td>
                     <td>{{ u.username }}</td>
-                    <td>{{ u.password }}</td>
+                    <!--<td>{{ u.password }}</td>-->
                     <td>{{ u.enabled }}</td>
                     <td>{{ u.formatedDate }}</td>
                     <td>{{ u.name }}</td>

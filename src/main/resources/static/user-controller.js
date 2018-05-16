@@ -3,6 +3,10 @@ var app = angular.module('UsersApp', ['ui.materialize'])
         $scope.users = [];
         $scope.new = {};
 
+
+        $scope.details = false;
+        $scope.showSearh = false;
+
         $scope.listar = function () {
             $http.get('/users')
                 .success(function(data) {
@@ -12,12 +16,21 @@ var app = angular.module('UsersApp', ['ui.materialize'])
                 .error(function(err) {
                     console.log(err);
                 });
+
+            $scope.details = false;
+            $scope.showSearh = false;
+
         }
 
         $scope.select = {
             value: "true",
             choices: ["true","false"]
         };
+
+        $scope.selectSearch = {
+            value: "Name",
+            choices: [ "Name", "Username", "Email" ]
+        }
 
         $scope.clearForm = function () {
             $scope.new = {};
@@ -59,14 +72,14 @@ var app = angular.module('UsersApp', ['ui.materialize'])
 
         //call onload html
         angular.element(document).ready(function () {
-            $scope.$apply( function() {
-                //prepara os combobox
-                document.addEventListener('DOMContentLoaded', function() {
-                    var elems 	= document.querySelectorAll('select');
-                    var options = document.querySelectorAll('option');
-                    var instances = M.FormSelect.init(elems, options);
-                });
-            });
+            // $scope.$apply( function() {
+            //     //prepara os combobox
+            //     document.addEventListener('DOMContentLoaded', function() {
+            //         var elems 	= document.querySelectorAll('select');
+            //         var options = document.querySelectorAll('option');
+            //         var instances = M.FormSelect.init(elems, options);
+            //     });
+            // });
 
             $scope.currentTime = '';
             $scope.listar();
@@ -86,6 +99,9 @@ var app = angular.module('UsersApp', ['ui.materialize'])
         }
 
         $scope.putDataUser = function (id) {
+            $scope.details = true;
+            $scope.showSearh = false;
+
             $http.get('/users/' + id)
                 .success(function(data) {
                     //console.log(data);
@@ -95,9 +111,12 @@ var app = angular.module('UsersApp', ['ui.materialize'])
                     $scope.select.value = data.enabled;
                     $scope.new.username = data.username;
                     $scope.new.password = data.password;
-                    $scope.currentTime = data.dateFmt;
+                    $scope.currentTime = data.formatedDate;
                     $scope.new.email = data.email;
                     $scope.new.phone = data.phone;
+
+                    // $scope.setCombo();
+                    $('select').material_select();
 
                 })
                 .error(function(err) {
@@ -116,7 +135,6 @@ var app = angular.module('UsersApp', ['ui.materialize'])
                 "email" : $scope.new.email,
                 "phone" : $scope.new.phone,
                 "formatedDate" : $scope.currentTime
-                //"data$scope.currentTime = data.dateFmt;
             }
 
             $http({
@@ -135,7 +153,44 @@ var app = angular.module('UsersApp', ['ui.materialize'])
                 console.log(error);
             });
         }
+        
+        $scope.searchUser = function () {
+            var type = $scope.selectSearch.value;
+            var url = '/users/';
 
+
+
+            switch ( type ) {
+                //"Name", "Username", "Email" ]
+                case "Name" :
+                    url += 'findByName/' + $scope.search.name;
+                    break;
+                case "Username" :
+                    url += 'findByUsername/' + $scope.search.username;
+                    break;
+                case "Username" :
+                    url += 'findByEmail/' + $scope.search.email;
+                    break;
+            }
+
+            $http.get( url )
+                .success(function(data) {
+                    console.log(data);
+                    $scope.users = data;
+                })
+                .error(function(err) {
+                    console.log(err);
+                });
+
+            $scope.details = false;
+            $scope.showSearh = false;
+        }
+
+        this.$onChanges = function () {
+            setTimeout(function(){
+                $('select').material_select();
+            },0);
+        };
 
     }]);
 
