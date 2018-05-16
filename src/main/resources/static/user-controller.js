@@ -86,7 +86,27 @@ var app = angular.module('UsersApp', ['ui.materialize'])
                 });
         }
 
+        $scope.putDataUser = function (id) {
+            $http.get('/users/' + id)
+                .success(function(data) {
+                    //console.log(data);
+                    $scope.new.id = data.id;
+                    $scope.new.name = data.name;
+                    $scope.new.surname = data.surname;
+                    $scope.select.value = data.enabled;
+                    $scope.new.username = data.username;
+                    $scope.new.password = data.password;
+                    $scope.currentTime = data.dateFmt;
+                    $scope.new.email = data.email;
+                    $scope.new.phone = data.phone;
 
+
+                    //$scope.users = data;
+                })
+                .error(function(err) {
+                    console.log(err);
+                });
+        }
 
 
 
