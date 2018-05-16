@@ -6,7 +6,7 @@
 	<groupId>org.todeschini</groupId>
 	<artifactId>users</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>users</name>
 	<description>Desafio Suntech</description>
@@ -50,6 +50,13 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+
+		<!-- We need to include the javax.servlet API specs, the implementation will be provided by Wildfly / JBoss-->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -60,4 +67,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>

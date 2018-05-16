@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="UsersApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de usuários</title>
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+
+    <!-- JavaScript for: jQuery, angular, materialize, and angular-materialize. All of which are needed. -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-materialize/0.2.2/angular-materialize.min.js"></script>
+
+    <!-- Your app -->
+    <script type="text/javascript" src="user-controller.js"></script>
+    <style type="text/css">
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        .erro {
+            color: red;
+        }
+
+    </style>
+</head>
+<body ng-controller="UserController">
+
+<nav>
+    <div class="nav-wrapper teal lighten-2">
+        <a href="#" class="brand-logo center">Users</a>
+    </div>
+</nav>
+
+<main>
+
+    <main>
+
+        <div class="row" style="margin-top: 50px;">
+            <form>
+                <div class="row">
+
+                    <input type="hidden" ng-model="new.id">
+
+                    <div class="input-field col s6">
+                        <input type="text" name="nome" id="nome" ng-model="new.name" class="validade" placeholder="Name" focus-me="true">
+                        <label for="nome">Name</label>
+                    </div>
+
+                    <div class="input-field col s6">
+                        <input type="text" name="surname" id="surname" ng-model="new.surname" class="validade" placeholder="Surname">
+                        <label for="surname">Surname</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <select name="enabled" id="enabled" ng-model="select.value" material-select watch>
+                            <option>true</option>
+                            <option>false</option>
+                        </select>
+                        <label for="enabled">enabled</label>
+                    </div>
+
+
+                    <div class="input-field col s4">
+                        <input type="text" name="username" id="username" ng-model="new.username" class="validade" placeholder="Username">
+                        <label for="username">Username</label>
+                    </div>
+
+
+                    <div class="input-field col s4">
+                        <input type="password" name="password" id="password" ng-model="new.password" class="validade" placeholder="Password">
+                        <label for="password">Password</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <input input-date type="text"
+                               name="created"
+                               id="inputCreated"
+                               ng-model="currentTime"
+                               container=""
+                               format="yyyy-mm-dd"
+                               months-full="{{ month }}"
+                               months-short="{{ monthShort }}"
+                               weekdays-full="{{ weekdaysFull }}"
+                               weekdays-short="{{ weekdaysShort }}"
+                               weekdays-letter="{{ weekdaysLetter }}"
+                               disable="disable"
+                               min="{{ minDate }}"
+                               max="{{ maxDate }}"
+                               today="today"
+                               first-day="1"
+                               clear="clear"
+                               close="close"
+                               select-years="100"
+                               on-start="onStart()"
+                               on-render="onRender()"
+                               on-open="onOpen()"
+                               on-close="onClose()"
+                               on-set="onSet()"
+                               on-stop="onStop()" />
+                        <label for="inputCreated">Register Date</label>
+                    </div>
+
+
+                    <div class="input-field col s4">
+                        <input type="email" name="email" id="email" ng-model="new.email" class="validade" placeholder="E-mail">
+                        <label for="email">E-mail</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <input type="tel" name="phone" id="phone" ng-model="new.phone" class="validade" placeholder="Phone">
+                        <label for="phone">Phone</label>
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+
+        <button class="btn waves-effect waves-light" ng-click="calcularCasa()">Adicionar</button>
+
+        <div class="row">
+
+            <table class="striped">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>username</th>
+                    <th>password</th>
+                    <th>registerDate</th>
+                    <th>name</th>
+                    <th>surname</th>
+                    <th>email</th>
+                    <th>phone</th>
+                    <th>edit</th>
+                    <th>del</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="u in users">
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.password }}</td>
+                    <td>{{ u.dateFmt }}</td>
+                    <td>{{ u.name }}</td>
+                    <td>{{ u.surname }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.phone }}</td>
+                    <td> <a ng-click="putDataUser(u.id)">edit</a></td>
+                    <td> <a ng-click="delUser(u.id)">del</a></td>
+
+
+                </tbody>
+            </table>
+
+
+
+        </div>
+
+</main>
+
+<footer class="page-footer teal lighten-2">
+    <div class="container">
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            © 2014 Copyright Artur Todeschini Crestani
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
