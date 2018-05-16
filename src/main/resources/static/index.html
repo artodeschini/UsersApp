@@ -119,13 +119,18 @@
                         <label for="phone">Phone</label>
                     </div>
 
-
+                    <div class="row">
+                        <div class="col s12 right-align">
+                            <button class="btn waves-effect waves-light" ng-click="addUser()">Add</button>
+                            <button class="btn waves-effect waves-light" ng-click="editUser()">Edit</button>
+                        </div>
+                    </div>
                 </div>
 
             </form>
         </div>
 
-        <button class="btn waves-effect waves-light" ng-click="calcularCasa()">Adicionar</button>
+
 
         <div class="row">
 
@@ -135,6 +140,7 @@
                     <th>id</th>
                     <th>username</th>
                     <th>password</th>
+                    <th>enabled</th>
                     <th>registerDate</th>
                     <th>name</th>
                     <th>surname</th>
@@ -150,7 +156,8 @@
                     <td>{{ u.id }}</td>
                     <td>{{ u.username }}</td>
                     <td>{{ u.password }}</td>
-                    <td>{{ u.dateFmt }}</td>
+                    <td>{{ u.enabled }}</td>
+                    <td>{{ u.formatedDate }}</td>
                     <td>{{ u.name }}</td>
                     <td>{{ u.surname }}</td>
                     <td>{{ u.email }}</td>

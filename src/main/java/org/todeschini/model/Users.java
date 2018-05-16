@@ -4,10 +4,9 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,8 +36,11 @@ public class Users {
     private String username;
     private String password;
     private Boolean enabled;
-    @DateTimeFormat(pattern="dd/MM/yyyy")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date registerDate;
+
+    @Transient
+    private String formatedDate;
 
     @NotEmpty
     private String name;
@@ -137,18 +139,27 @@ public class Users {
         this.phone = phone;
     }
 
-    public String getDateFmt() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(this.registerDate);
+    public String getFormatedDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date createDdate = this.registerDate;
+        if( createDdate!=null){
+            return  dateFormat.format(createDdate);
+        }
+        return "";
     }
 
-    public void setDateFmt(String dateFmt) {
+    public void setFormatedDate(String formatedDate) {
+        this.formatedDate = formatedDate;
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            this.registerDate = sdf.parse(dateFmt);
-        } catch (Exception e) {
+            this.registerDate  = dateFormat.parse(formatedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
             this.registerDate = new Date();
         }
+
     }
 
     @Override

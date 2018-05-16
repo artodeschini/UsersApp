@@ -1,11 +1,29 @@
 var app = angular.module('UsersApp', ['ui.materialize'])
-    .controller('UserController', ["$scope","$http", function ($scope, $http) {
+    .controller('UserController', ["$scope","$http", "$timeout", function ($scope, $http, $timeout) {
+        $scope.users = [];
+        $scope.new = {};
+
+        $scope.listar = function () {
+            $http.get('/users')
+                .success(function(data) {
+                    //console.log(data);
+                    $scope.users = data;
+                })
+                .error(function(err) {
+                    console.log(err);
+                });
+        }
+
         $scope.select = {
             value: "true",
             choices: ["true","false"]
         };
 
-        $scope.new = {};
+        $scope.clearForm = function () {
+            $scope.new = {};
+            $scope.currentTime = '';
+            $scope.select.value = "true";
+        }
 
         var currentTime = new Date();
         $scope.currentTime = currentTime;
@@ -51,35 +69,16 @@ var app = angular.module('UsersApp', ['ui.materialize'])
             });
 
             $scope.currentTime = '';
+            $scope.listar();
         });
-
-        $scope.users = [];
-
-        $http.get('/users')
-            .success(function(data) {
-                //console.log(data);
-                $scope.users = data;
-            })
-            .error(function(err) {
-                console.log(err);
-            });
 
         $scope.delUser = function ( id ) {
             $http({
                 method: 'DELETE',
                 url: '/users/' + id
             }).then(function(response) {
-                console.log(response);
-                $scope.users = [];
-
-                $http.get('/users')
-                    .success(function(data) {
-                        //console.log(data);
-                        $scope.users = data;
-                    })
-                    .error(function(err) {
-                        console.log(err);
-                    });
+                //console.log(response);
+                $scope.listar();
 
                 }, function(error) {
                     console.log(error);
@@ -100,14 +99,42 @@ var app = angular.module('UsersApp', ['ui.materialize'])
                     $scope.new.email = data.email;
                     $scope.new.phone = data.phone;
 
-
-                    //$scope.users = data;
                 })
                 .error(function(err) {
                     console.log(err);
                 });
         }
 
+        $scope.editUser = function () {
+            var user = {
+                "id" : $scope.new.id,
+                "name" : $scope.new.name,
+                "surname" : $scope.new.surname,
+                "enabled" : $scope.select.value,
+                "username" : $scope.new.username,
+                "password" : $scope.new.password,
+                "email" : $scope.new.email,
+                "phone" : $scope.new.phone,
+                "formatedDate" : $scope.currentTime
+                //"data$scope.currentTime = data.dateFmt;
+            }
+
+            $http({
+                method: 'PUT',
+                url: '/users',
+                data : JSON.stringify(user),
+                headers: {"Content-Type": "application/json;charset=UTF-8"}
+
+            }).then(function(response) {
+                //console.log(response);
+                $scope.listar();
+
+                $scope.clearForm();
+
+            }, function(error) {
+                console.log(error);
+            });
+        }
 
 
     }]);
