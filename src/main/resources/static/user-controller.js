@@ -117,11 +117,47 @@ var app = angular.module('UsersApp', ['ui.materialize'])
 
                     // $scope.setCombo();
                     $('select').material_select();
-
+                    $scope.$apply( function() {
+                        //prepara os combobox
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var elems 	= document.querySelectorAll('select');
+                            var options = document.querySelectorAll('option');
+                            var instances = M.FormSelect.init(elems, options);
+                        });
+                    });
                 })
                 .error(function(err) {
                     console.log(err);
                 });
+        }
+
+        $scope.addUser = function () {
+            var user = {
+                "name" : $scope.new.name,
+                "surname" : $scope.new.surname,
+                "enabled" : $scope.select.value,
+                "username" : $scope.new.username,
+                "password" : $scope.new.password,
+                "email" : $scope.new.email,
+                "phone" : $scope.new.phone,
+                "formatedDate" : $scope.currentTime
+            }
+
+            $http({
+                method: 'POST',
+                url: '/users',
+                data : JSON.stringify(user),
+                headers: {"Content-Type": "application/json;charset=UTF-8"}
+
+            }).then(function(response) {
+                //console.log(response);
+                $scope.listar();
+
+                $scope.clearForm();
+
+            }, function(error) {
+                console.log(error);
+            });
         }
 
         $scope.editUser = function () {
